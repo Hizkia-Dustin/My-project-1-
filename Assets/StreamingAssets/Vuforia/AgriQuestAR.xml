@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+  <Tracking>
+    <ImageTarget name="Quiz" size="1.000000 1.000000" />
+    <ImageTarget name="Serigala" size="1.000000 1.000000" />
+    <ImageTarget name="Kentang" size="1.000000 1.399554" />
+    <ImageTarget name="Tomat" size="1.000000 1.399554" />
+    <ImageTarget name="Cabai" size="1.000000 1.399554" />
+    <ImageTarget name="Ubi" size="1.000000 1.399554" />
+    <ImageTarget name="KacangTanah" size="1.000000 1.399554" />
+    <ImageTarget name="Gandum" size="1.000000 1.399554" />
+    <ImageTarget name="Padi" size="1.000000 1.399554" />
+    <ImageTarget name="Kunyit" size="1.000000 1.399554" />
+    <ImageTarget name="Kakao" size="1.000000 1.399554" />
+    <ImageTarget name="Kopi" size="1.000000 1.399554" />
+    <ImageTarget name="Tebu" size="1.000000 1.399554" />
+    <ImageTarget name="Getah" size="1.000000 1.399554" />
+    <ImageTarget name="Bambu" size="1.000000 1.399554" />
+    <ImageTarget name="Nanas" size="1.000000 1.399554" />
+    <ImageTarget name="Sawit" size="1.000000 1.399554" />
+    <ImageTarget name="Pisang" size="1.000000 1.399554" />
+    <ImageTarget name="Telur" size="1.000000 1.399554" />
+    <ImageTarget name="Susu" size="1.000000 1.399554" />
+    <ImageTarget name="Naga" size="1.000000 1.399554" />
+    <ImageTarget name="Bebek" size="1.000000 1.399554" />
+    <ImageTarget name="Ayam" size="1.000000 1.399554" />
+    <ImageTarget name="Apel" size="1.000000 1.399554" />
+    <ImageTarget name="Babi" size="1.000000 1.399554" />
+    <ImageTarget name="Domba" size="1.000000 1.399554" />
+    <ImageTarget name="Kerbau" size="1.000000 1.399554" />
+    <ImageTarget name="Sapi" size="1.000000 1.399554" />
+    <ImageTarget name="Cumi" size="1.000000 1.399554" />
+    <ImageTarget name="Udang" size="1.000000 1.399554" />
+    <ImageTarget name="Lobster" size="1.000000 1.399554" />
+    <ImageTarget name="Lele" size="1.000000 1.399554" />
+    <ImageTarget name="Tonggol" size="1.000000 1.399554" />
+    <ImageTarget name="Tuna" size="1.000000 1.399554" />
+    <ImageTarget name="Wortel" size="1.000000 1.399554" />
+  </Tracking>
+</QCARConfig>
