@@ -1,0 +1,11 @@
+Scene: ARCardScan
+UI_Canvas found.
+ UI_Canvas (Active: True)
+-- Button_Back (Active: True)
+---- Text (Active: True)
+-- PanelInfoTanaman (Active: False)
+---- Image (Active: True)
+---- Nama Tanaman (Active: True)
+---- ButtonPoin (Active: True)
+------ Text (TMP) (Active: True)
+---- Deskripsi Tanaman (Active: True)

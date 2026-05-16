@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI; 
 using TMPro;
 using System.Linq;    
@@ -62,6 +63,20 @@ public class GameManager : MonoBehaviour
     // --- MENGGANTI BOOLEAN MENJADI TIPE SCAN ---
     private TipeScan modeScanSaatIni = TipeScan.TidakAda;
 
+    private void Awake() {
+        InitializeHardcodedDatabases();
+    }
+
+    private void Start()
+    {
+        // Jika di scene ARCardScan, langsung set mode scan ke Tanaman untuk gallery mode
+        if (SceneManager.GetActiveScene().name == "ARCardScan")
+        {
+            modeScanSaatIni = TipeScan.Tanaman;
+            if (panelGameplay != null) panelGameplay.SetActive(false);
+        }
+    }
+
     // --- FASE 1: START GAME ---
     public void StartGame(int numberOfPlayers)
     {
@@ -96,9 +111,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void KembaliKeMenu() {
-        panelResult.SetActive(false);
-        panelMainMenu.SetActive(true);
+        SceneManager.LoadScene("HOMEPAGE");
     }
+
 
     public void EndGame() {
         panelGameplay.SetActive(false);
@@ -133,17 +148,26 @@ public class GameManager : MonoBehaviour
     // --- FASE 3: POP-UP DIBUKA OLEH KARTU AR ---
     
     public void BukaPanelTanamanAR(string nama, string deskripsi) {
+        Debug.Log("BukaPanelTanamanAR dipanggil untuk: " + nama);
         // Tolak jika tiketnya bukan Tanaman
-        if (modeScanSaatIni != TipeScan.Tanaman) return; 
+        if (modeScanSaatIni != TipeScan.Tanaman) {
+            Debug.LogWarning("Ditolak: modeScanSaatIni adalah " + modeScanSaatIni);
+            return; 
+        }
         
         // Langsung hanguskan tiket agar tidak scan ganda
         modeScanSaatIni = TipeScan.TidakAda;      
 
-        panelGameplay.SetActive(false); 
-        panelInfoTanaman.SetActive(true);
+        if (panelGameplay != null) panelGameplay.SetActive(false); 
+        if (panelInfoTanaman != null) {
+            panelInfoTanaman.SetActive(true);
+            Debug.Log("PanelInfoTanaman diaktifkan.");
+        } else {
+            Debug.LogError("PanelInfoTanaman NULL! Cek referensi di Inspector GameManager.");
+        }
 
-        textNamaTanaman.text = nama;
-        textDeskripsiTanaman.text = deskripsi;
+        if (textNamaTanaman != null) textNamaTanaman.text = nama;
+        if (textDeskripsiTanaman != null) textDeskripsiTanaman.text = deskripsi;
     }
 
     public void BukaPanelQuizAR() {
@@ -190,6 +214,19 @@ public class GameManager : MonoBehaviour
         NextTurn(); 
     }
 
+    public void TutupPanelTanaman() {
+        panelInfoTanaman.SetActive(false);
+        // Jika di scene ARCardScan, kembalikan tiket agar bisa scan kartu lain secara kontinu
+        if (SceneManager.GetActiveScene().name == "ARCardScan")
+        {
+            modeScanSaatIni = TipeScan.Tanaman;
+        }
+    }
+
+    public void KembaliKeHomeDariAR() {
+        SceneManager.LoadScene("HOMEPAGE");
+    }
+
     public void CekJawabanQuiz(string pilihanPemain) {
         panelQuiz.SetActive(false);
         panelNotif.SetActive(true); 
@@ -219,6 +256,56 @@ public class GameManager : MonoBehaviour
         panelNotif.SetActive(false);
         panelGameplay.SetActive(true);
         NextTurn();
+    }
+
+    private void InitializeHardcodedDatabases() {
+        // --- DATABASE QUIZ (20 Soal) ---
+        databaseQuiz = new List<DataQuiz>() {
+            new DataQuiz { pertanyaan = "Salah satu karakteristik produk pertanian adalah 'perishable', yang artinya...", pilihanA = "Mudah rusak", pilihanB = "Membutuhkan ruang penyimpanan luas", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "Dua tanaman biji-bijian yang menjadi penghasil karbohidrat utama di Indonesia adalah...", pilihanA = "Kedelai dan kacang tanah", pilihanB = "Padi dan jagung", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "Kedelai dan kacang tanah merupakan kelompok tanaman sumber...", pilihanA = "Karbohidrat", pilihanB = "Protein dan lemak", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "Sifat dari protein gluten pada adonan gandum adalah elastis dan mampu...", pilihanA = "Menolak air", pilihanB = "Menyerap air", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "Buah yang dapat melanjutkan proses pematangan setelah dipetik disebut buah...", pilihanA = "Klimaterik", pilihanB = "Non-klimaterik", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "Contoh dari buah non-klimaterik yang harus dipanen saat matang adalah...", pilihanA = "Mentimun dan nanas", pilihanB = "Apel dan pisang", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "Pada industri kelapa sawit, produk Crude Palm Oil (CPO) dihasilkan dari bagian...", pilihanA = "Inti sawit (Kernel)", pilihanB = "Mesocarp (Daging buah)", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "Minyak kelapa sawit yang berasal dari inti sawit dikenal dengan singkatan...", pilihanA = "CPO", pilihanB = "PKO", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "Getah lateks yang merupakan bahan baku industri karet alam diambil dari bagian...", pilihanA = "Batang", pilihanB = "Daun", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "Lembaran karet olahan hasil pengasapan disebut dengan istilah...", pilihanA = "RSS (Ribbed Smoked Sheet)", pilihanB = "Plywood", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "Tanaman ubi kayu dan ubi jalar termasuk dalam kelompok tanaman umbi-umbian sebagai sumber...", pilihanA = "Protein", pilihanB = "Karbohidrat", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "Proses penggilingan dari biji gandum (wheat) akan menghasilkan bahan pangan berupa...", pilihanA = "Tepung terigu", pilihanB = "Tepung maizena", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "Berdasarkan data tahun 2023, jenis sayuran dengan produksi paling tinggi di Indonesia adalah...", pilihanA = "Kubis", pilihanB = "Bawang Merah", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "Proses pematangan dan pembusukan pada buah klimaterik ditandai dengan tingginya produksi gas...", pilihanA = "Etilen", pilihanB = "Oksigen", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "Nira yang diekstrak dari tanaman tebu diolah lebih lanjut untuk menghasilkan produk utama berupa...", pilihanA = "Bioetanol", pilihanB = "Gula", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "Gondorukem dan terpentin merupakan contoh produk pengolahan hasil hutan bukan kayu dari bahan baku...", pilihanA = "Getah dan resin", pilihanB = "Serpih kayu", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "Papan Serat atau Medium Density Fiberboard (MDF) termasuk ke dalam industri pengolahan hasil hutan...", pilihanA = "Bukan Kayu", pilihanB = "Kayu", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "Pengolahan biji kopi melalui beberapa tahapan dapat menghasilkan produk bubuk berupa...", pilihanA = "Kopi instan dan soft drink", pilihanB = "Minyak asiri dan oleoresin", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "Tanaman lada (pepper) diolah secara komersial menjadi dua jenis produk bumbu, yaitu...", pilihanA = "Lada merah dan lada hijau", pilihanB = "Lada hitam dan lada putih", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "Industri plywood (kayu lapis) memanfaatkan bahan baku utamanya dari produk...", pilihanA = "Kayu bulat", pilihanB = "Getah pohon", kunciJawaban = "A" }
+        };
+
+        // --- DATABASE SERIGALA (20 Soal) ---
+        databaseSerigala = new List<DataQuiz>() {
+            new DataQuiz { pertanyaan = "AWAS! Usaha memperoleh ikan dari perairan yang tidak dibudidayakan disebut...", pilihanA = "Perikanan budidaya", pilihanB = "Perikanan tangkap", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "CEPAT! Kegiatan perikanan di laut dengan kedalaman < 200 meter diklasifikasikan sebagai...", pilihanA = "Laut dangkal", pilihanB = "Laut dalam", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "LARI! Dua komoditas unggulan ekspor perikanan Indonesia di antaranya adalah...", pilihanA = "Udang dan rumput laut", pilihanB = "Daging sapi dan telur", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "HATI-HATI! Rumput laut jenis Gracilaria sp umumnya diproses menjadi produk...", pilihanA = "Agar", pilihanB = "Karaginan", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "SERANGAN! Rumput laut dari jenis Eucheuma sangat berguna karena menghasilkan...", pilihanA = "Alginat", pilihanB = "Karaginan", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "CEPAT! Seng Khlorida dan Amonium Khlorida merupakan turunan dari produk...", pilihanA = "Garam (NaCl)", pilihanB = "Rumput laut", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "AWAS! Pada industri pengolahan udang, produk yang masuk kategori 'Value Added' adalah...", pilihanA = "Nugget dan Dimsum", pilihanB = "Udang beku utuh", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "LARI! Hewan peliharaan yang produknya untuk pangan atau industri disebut...", pilihanA = "Unggas", pilihanB = "Ternak", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "HATI-HATI! Daging sapi yang memiliki kualitas segar dan normal umumnya memiliki pH...", pilihanA = "5,4 sampai 5,9", pilihanB = "7,0 sampai 7,5", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "CEPAT! Bagian potongan daging sapi Sirloin (Has luar) paling cocok dimasak menjadi...", pilihanA = "Bistik", pilihanB = "Abon", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "AWAS! Bagian susu yang paling banyak lemak dan mengapung ke atas disebut...", pilihanA = "Krim (Kepala susu)", pilihanB = "Susu skim", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "LARI! Proses pemanasan susu untuk membunuh bakteri patogen dinamakan...", pilihanA = "Homogenisasi", pilihanB = "Pasteurisasi", kunciJawaban = "B" },
+            new DataQuiz { pertanyaan = "HATI-HATI! Metode Pasteurisasi Sekejap (HTST) dilakukan pada suhu...", pilihanA = "85°C – 95°C", pilihanB = "62°C - 65°C", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "CEPAT! Susu evaporasi diolah dengan membuang kandungan air sebanyak...", pilihanA = "60%", pilihanB = "10%", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "AWAS! Yoghurt, dadih, dan keju dibuat menggunakan metode...", pilihanA = "Fermentasi", pilihanB = "Sterilisasi", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "LARI! Limbah cangkang telur afkir dapat dimanfaatkan kembali sebagai...", pilihanA = "Pakan ternak", pilihanB = "Bahan bakar", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "HATI-HATI! Keunggulan utama produk olahan tepung telur adalah...", pilihanA = "Masa simpan panjang", pilihanB = "Tidak mengandung protein", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "CEPAT! Komoditas laut TCT adalah Tuna, Cakalang, dan...", pilihanA = "Tongkol", pilihanB = "Teri", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "AWAS! Bahan baku lumatan daging ikan untuk memproduksi bakso/nugget disebut...", pilihanA = "Surimi", pilihanB = "Silase", kunciJawaban = "A" },
+            new DataQuiz { pertanyaan = "LARI! Ayam ras, itik, dan burung puyuh dikategorikan sebagai ternak...", pilihanA = "Unggas", pilihanB = "Ruminansia", kunciJawaban = "A" }
+        };
     }
 }
 

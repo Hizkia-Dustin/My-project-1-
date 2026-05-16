@@ -12,4 +12,14 @@ public class SceneLoader : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+
+    public void LoadARCardScan()
+    {
+        SceneManager.LoadScene("ARCardScan");
+    }
+
+    public void LoadHOMEPAGE()
+    {
+        SceneManager.LoadScene("HOMEPAGE");
+    }
 }
