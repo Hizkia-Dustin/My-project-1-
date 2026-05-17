@@ -28,15 +28,35 @@ public class ButtonSoundManager : MonoBehaviour
 
     void Awake()
     {
-        // Singleton pattern: pertahankan SoundManager di seluruh scene
+        // Singleton pattern: pertahankan SoundManager di seluruh scene tanpa membawa UI Canvas
         if (Instance == null)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            // Jika ditempel di Canvas atau UI element, kita buat Game Object baru untuk menampung Instance SoundManager agar tidak merusak Canvas
+            if (GetComponent<Canvas>() != null || GetComponent<RectTransform>() != null || transform.parent != null)
+            {
+                Debug.Log("🔊 ButtonSoundManager terdeteksi ditempel pada Canvas/UI. Membuat manager background terpisah...");
+                GameObject go = new GameObject("[Dynamic_ButtonSoundManager]");
+                var newManager = go.AddComponent<ButtonSoundManager>();
+                newManager.defaultClickSound = this.defaultClickSound;
+                newManager.customSounds = this.customSounds;
+                Instance = newManager;
+                DontDestroyOnLoad(go);
+                
+                // Hancurkan component ini di Canvas agar tidak memicu DontDestroyOnLoad pada Canvas
+                Destroy(this);
+                return;
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
         }
         else if (Instance != this)
         {
-            Destroy(gameObject);
+            // PENTING: Hanya hancurkan COMPONENT (this) ini saja, JANGAN hancurkan seluruh Game Object Canvas!
+            Debug.Log("🔊 ButtonSoundManager duplikat terdeteksi. Menghancurkan komponen tambahan, bukan Canvas.");
+            Destroy(this);
             return;
         }
 
