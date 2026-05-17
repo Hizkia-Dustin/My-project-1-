@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -57,11 +58,23 @@ public class GameManager : MonoBehaviour
     public GameObject panelNotif;
     public TextMeshProUGUI textNotif;
 
+    [Header("Suara Efek (AR Marker Scan)")]
+    public AudioClip soundTanamanDitemukan;
+    public AudioClip soundQuizDitemukan;
+    public AudioClip soundSerigalaDitemukan;
+
+    [Header("Suara Efek (Jawaban)")]
+    public AudioClip soundJawabanBenar;
+    public AudioClip soundJawabanSalah;
+
     private List<Player> players = new List<Player>();
     private int currentPlayerIndex = 0;
 
     // --- MENGGANTI BOOLEAN MENJADI TIPE SCAN ---
     private TipeScan modeScanSaatIni = TipeScan.TidakAda;
+
+    private Coroutine spinQuizCoroutine;
+    private Coroutine spinSerigalaCoroutine;
 
     private void Awake() {
         InitializeHardcodedDatabases();
@@ -147,67 +160,120 @@ public class GameManager : MonoBehaviour
 
     // --- FASE 3: POP-UP DIBUKA OLEH KARTU AR ---
     
-    public void BukaPanelTanamanAR(string nama, string deskripsi) {
-        Debug.Log("BukaPanelTanamanAR dipanggil untuk: " + nama);
-        // Tolak jika tiketnya bukan Tanaman
-        if (modeScanSaatIni != TipeScan.Tanaman) {
-            Debug.LogWarning("Ditolak: modeScanSaatIni adalah " + modeScanSaatIni);
-            return; 
+    private void PlayMarkerSoundEffect(AudioClip clip) {
+        if (clip != null) {
+            GameObject tempObj = new GameObject("TempMarkerSound_" + clip.name);
+            AudioSource source = tempObj.AddComponent<AudioSource>();
+            source.clip = clip;
+            source.Play();
+            Destroy(tempObj, clip.length);
         }
-        
-        // Langsung hanguskan tiket agar tidak scan ganda
-        modeScanSaatIni = TipeScan.TidakAda;      
+    }
 
-        if (panelGameplay != null) panelGameplay.SetActive(false); 
-        if (panelInfoTanaman != null) {
-            panelInfoTanaman.SetActive(true);
-            Debug.Log("PanelInfoTanaman diaktifkan.");
+    private bool CekIzinScan(TipeScan tipeDibutuhkan) {
+        // Jika sedang di scene ARCardScan, pemain BEBAS gonta-ganti marker kapan saja
+        if (SceneManager.GetActiveScene().name == "ARCardScan") return true; 
+        // Jika di Board Game, pastikan tiketnya sesuai
+        return modeScanSaatIni == tipeDibutuhkan;
+    }
+
+    private void SiapkanPanelAR() {
+        if (SceneManager.GetActiveScene().name == "ARCardScan") {
+            // BEBAS: Tutup semua panel lain agar gonta-ganti AR mulus dan responsif di Encyclopedia
+            if (panelInfoTanaman != null) panelInfoTanaman.SetActive(false);
+            if (panelQuiz != null) panelQuiz.SetActive(false);
+            if (panelSerigala != null) panelSerigala.SetActive(false);
         } else {
-            Debug.LogError("PanelInfoTanaman NULL! Cek referensi di Inspector GameManager.");
+            // KETAT: Di Board Game, begitu 1 kartu ter-scan, langsung HANGUSKAN tiketnya saat itu juga!
+            // Ini untuk mencegah pemain curang (misal gonta-ganti kartu Quiz untuk cari soal termudah)
+            modeScanSaatIni = TipeScan.TidakAda;
         }
+        if (panelGameplay != null) panelGameplay.SetActive(false); 
+    }
+
+    public void BukaPanelTanamanAR(string nama, string deskripsi) {
+        if (!CekIzinScan(TipeScan.Tanaman)) return;
+        
+        PlayMarkerSoundEffect(soundTanamanDitemukan);
+        SiapkanPanelAR();
+
+        if (panelInfoTanaman != null) panelInfoTanaman.SetActive(true);
 
         if (textNamaTanaman != null) textNamaTanaman.text = nama;
         if (textDeskripsiTanaman != null) textDeskripsiTanaman.text = deskripsi;
     }
 
     public void BukaPanelQuizAR() {
-        // Tolak jika tiketnya bukan Quiz
-        if (modeScanSaatIni != TipeScan.Quiz) return; 
+        if (!CekIzinScan(TipeScan.Quiz)) return; 
         
-        // Langsung hanguskan tiket agar tidak scan ganda
-        modeScanSaatIni = TipeScan.TidakAda;      
+        PlayMarkerSoundEffect(soundQuizDitemukan);
+        SiapkanPanelAR();
 
-        panelGameplay.SetActive(false);
-        panelQuiz.SetActive(true);
+        if (panelQuiz != null) panelQuiz.SetActive(true);
 
+        if (spinQuizCoroutine != null) StopCoroutine(spinQuizCoroutine);
+        spinQuizCoroutine = StartCoroutine(SpinPertanyaanQuiz());
+    }
+
+    private IEnumerator SpinPertanyaanQuiz() {
+        // Kosongkan tombol selama diacak
+        if (textTombolA != null) textTombolA.text = "...";
+        if (textTombolB != null) textTombolB.text = "...";
+
+        // Efek Spin (Ganti teks 15 kali sangat cepat)
+        for (int i = 0; i < 15; i++) {
+            int randomDisplay = Random.Range(0, databaseQuiz.Count);
+            if (textPertanyaanQuiz != null) textPertanyaanQuiz.text = databaseQuiz[randomDisplay].pertanyaan;
+            yield return new WaitForSeconds(0.05f); // Jeda sangat singkat
+        }
+
+        // Tentukan soal akhir
         int indexAcak = Random.Range(0, databaseQuiz.Count);
         soalAktif = databaseQuiz[indexAcak];
 
-        textPertanyaanQuiz.text = soalAktif.pertanyaan;
-        textTombolA.text = soalAktif.pilihanA;
-        textTombolB.text = soalAktif.pilihanB;
+        if (textPertanyaanQuiz != null) textPertanyaanQuiz.text = soalAktif.pertanyaan;
+        if (textTombolA != null) textTombolA.text = soalAktif.pilihanA;
+        if (textTombolB != null) textTombolB.text = soalAktif.pilihanB;
     }
 
     public void BukaPanelSerigalaAR() {
-        // Tolak jika tiketnya bukan Serigala
-        if (modeScanSaatIni != TipeScan.Serigala) return; 
+        if (!CekIzinScan(TipeScan.Serigala)) return; 
         
-        // Langsung hanguskan tiket agar tidak scan ganda
-        modeScanSaatIni = TipeScan.TidakAda;      
+        PlayMarkerSoundEffect(soundSerigalaDitemukan);
+        SiapkanPanelAR();
 
-        panelGameplay.SetActive(false);
-        panelSerigala.SetActive(true);
+        if (panelSerigala != null) panelSerigala.SetActive(true);
 
+        if (spinSerigalaCoroutine != null) StopCoroutine(spinSerigalaCoroutine);
+        spinSerigalaCoroutine = StartCoroutine(SpinPertanyaanSerigala());
+    }
+
+    private IEnumerator SpinPertanyaanSerigala() {
+        // Kosongkan tombol selama diacak
+        if (textTombolASerigala != null) textTombolASerigala.text = "...";
+        if (textTombolBSerigala != null) textTombolBSerigala.text = "...";
+
+        // Efek Spin (Ganti teks 15 kali sangat cepat)
+        for (int i = 0; i < 15; i++) {
+            int randomDisplay = Random.Range(0, databaseSerigala.Count);
+            if (textPertanyaanSerigala != null) textPertanyaanSerigala.text = databaseSerigala[randomDisplay].pertanyaan;
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        // Tentukan soal akhir
         int indexAcak = Random.Range(0, databaseSerigala.Count);
         soalSerigalaAktif = databaseSerigala[indexAcak];
 
-        textPertanyaanSerigala.text = soalSerigalaAktif.pertanyaan;
-        textTombolASerigala.text = soalSerigalaAktif.pilihanA;
-        textTombolBSerigala.text = soalSerigalaAktif.pilihanB;
+        if (textPertanyaanSerigala != null) textPertanyaanSerigala.text = soalSerigalaAktif.pertanyaan;
+        if (textTombolASerigala != null) textTombolASerigala.text = soalSerigalaAktif.pilihanA;
+        if (textTombolBSerigala != null) textTombolBSerigala.text = soalSerigalaAktif.pilihanB;
     }
 
     // --- FASE 4: AKSI & NOTIFIKASI ---
     public void KlaimPoinTanaman() {
+        // Pemain sudah selesai, hanguskan tiket sekarang!
+        modeScanSaatIni = TipeScan.TidakAda;
+
         players[currentPlayerIndex].score += 150;
         panelInfoTanaman.SetActive(false);
         panelGameplay.SetActive(true);
@@ -228,25 +294,35 @@ public class GameManager : MonoBehaviour
     }
 
     public void CekJawabanQuiz(string pilihanPemain) {
+        // Pemain sudah menjawab, hanguskan tiket!
+        modeScanSaatIni = TipeScan.TidakAda;
+
         panelQuiz.SetActive(false);
         panelNotif.SetActive(true); 
 
         if (pilihanPemain == soalAktif.kunciJawaban) {
+            PlayMarkerSoundEffect(soundJawabanBenar);
             players[currentPlayerIndex].score += 100;
             textNotif.text = "Jawaban kamu BENAR!\nSelamat, kamu mendapat +100 Poin.";
         } else {
+            PlayMarkerSoundEffect(soundJawabanSalah);
             textNotif.text = "Sayang sekali, jawabanmu SALAH!\nJawaban yang benar adalah " + soalAktif.kunciJawaban + ".\nPoin kamu tidak bertambah.";
         }
     }
 
     public void CekJawabanSerigala(string pilihanPemain) {
+        // Pemain sudah menjawab, hanguskan tiket!
+        modeScanSaatIni = TipeScan.TidakAda;
+
         panelSerigala.SetActive(false);
         panelNotif.SetActive(true); 
 
         if (pilihanPemain == soalSerigalaAktif.kunciJawaban) {
+            PlayMarkerSoundEffect(soundJawabanBenar);
             players[currentPlayerIndex].score += 100;
             textNotif.text = "Jawaban kamu BENAR!\nKamu berhasil menghindar dan mendapat +100 Poin.";
         } else {
+            PlayMarkerSoundEffect(soundJawabanSalah);
             players[currentPlayerIndex].score -= 100;
             textNotif.text = "Oh tidak! Jawaban kamu SALAH!\nJawaban yang benar adalah " + soalSerigalaAktif.kunciJawaban + ".\nKamu terkena serangan Serigala. Poin dikurangi -100.";
         }

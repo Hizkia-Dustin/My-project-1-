@@ -51,12 +51,15 @@ public class FixARSceneUI : EditorWindow
         {
             SerializedObject so = new SerializedObject(gm);
             so.FindProperty("panelInfoTanaman").objectReferenceValue = panel;
-            
-            var textNama = panel.transform.Find("Text_NamaTanaman");
-            if (textNama != null) so.FindProperty("textNamaTanaman").objectReferenceValue = textNama.GetComponent<TextMeshProUGUI>();
-            
-            var textDesk = panel.transform.Find("Text_DeskripsiTanaman");
-            if (textDesk != null) so.FindProperty("textDeskripsiTanaman").objectReferenceValue = textDesk.GetComponent<TextMeshProUGUI>();
+            // Cari teks menggunakan pencarian rekursif agar tidak rusak jika dipindah ke dalam grup layout
+            var allTexts = panel.GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (var txt in allTexts)
+            {
+                if (txt.gameObject.name == "Text_NamaTanaman")
+                    so.FindProperty("textNamaTanaman").objectReferenceValue = txt;
+                else if (txt.gameObject.name == "Text_DeskripsiTanaman")
+                    so.FindProperty("textDeskripsiTanaman").objectReferenceValue = txt;
+            }
             
             so.ApplyModifiedProperties();
 

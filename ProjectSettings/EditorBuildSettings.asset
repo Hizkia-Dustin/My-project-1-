@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ARCardScan.unity
     guid: 0fb118835e67fc348a2cd3a069c39111
+  - enabled: 1
+    path: Assets/Scenes/InstructionScene.unity
+    guid: a0ac6fced301e504a813a75681dc2701
+  - enabled: 1
+    path: Assets/Scenes/InstructionSceneAuto.unity
+    guid: e217d2e2e92943a4aa345ff1cf951765
   m_configObjects: {}
