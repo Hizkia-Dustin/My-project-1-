@@ -1,0 +1,90 @@
+=== DAFTAR SEMUA TOMBOL DI GAME ANDA ===
+
+Keterangan: Nama tombol telah diubah secara otomatis (berawalan 'Btn_') agar mudah dikenali.
+
+
+--- SCENE: SampleScene ---
+- Nama Objek : Btn_Quiz
+  Teks       : ""
+  Lokasi     : Di dalam panel 'PanelGameplay'
+
+- Nama Objek : Btn_Klaim10Poin!
+  Teks       : "Klaim 10 Poin!"
+  Lokasi     : Di dalam panel 'PanelInfoTanaman'
+
+- Nama Objek : Btn_EndGame
+  Teks       : ""
+  Lokasi     : Di dalam panel 'PanelGameplay'
+
+- Nama Objek : Btn_KembalikeBeranda
+  Teks       : "Kembali ke Beranda"
+  Lokasi     : Di dalam panel 'PanelResult'
+
+- Nama Objek : Btn_Tanaman
+  Teks       : ""
+  Lokasi     : Di dalam panel 'PanelGameplay'
+
+- Nama Objek : Btn_A.Hijau
+  Teks       : "A. Hijau"
+  Lokasi     : Di dalam panel 'PanelSerigala'
+
+- Nama Objek : Btn_B.Hijau
+  Teks       : "B. Hijau"
+  Lokasi     : Di dalam panel 'PanelQuiz'
+
+- Nama Objek : Btn_Serigala
+  Teks       : ""
+  Lokasi     : Di dalam panel 'PanelGameplay'
+
+- Nama Objek : Btn_3Player
+  Teks       : "3 Player"
+  Lokasi     : Di dalam panel 'sellect player (1)'
+
+- Nama Objek : Btn_OK/Lanjut
+  Teks       : "OK / Lanjut"
+  Lokasi     : Di dalam panel 'PanelNotif'
+
+- Nama Objek : Btn_B.Hijau
+  Teks       : "B. Hijau"
+  Lokasi     : Di dalam panel 'PanelSerigala'
+
+- Nama Objek : Btn_A.Hijau
+  Teks       : "A. Hijau"
+  Lokasi     : Di dalam panel 'PanelQuiz'
+
+- Nama Objek : Btn_4Player
+  Teks       : "4 Player"
+  Lokasi     : Di dalam panel 'sellect player (1)'
+
+- Nama Objek : Btn_2Player
+  Teks       : "2 Player"
+  Lokasi     : Di dalam panel 'sellect player (1)'
+
+- Nama Objek : Btn_StartButton
+  Teks       : ""
+  Lokasi     : Di dalam panel 'sellect player'
+
+
+--- SCENE: HOMEPAGE ---
+- Nama Objek : Btn_PlayOfflineButton
+  Teks       : ""
+  Lokasi     : Di dalam panel 'hompage'
+
+- Nama Objek : Btn_INSTRUCTION
+  Teks       : ""
+  Lokasi     : Di dalam panel 'hompage'
+
+- Nama Objek : Btn_ARScannerTile
+  Teks       : ""
+  Lokasi     : Di dalam panel 'hompage'
+
+
+--- SCENE: ARCardScan ---
+- Nama Objek : Btn_KembaliKeMenu
+  Teks       : "Kembali Ke Menu"
+  Lokasi     : Di dalam panel 'PanelInfoTanaman'
+
+- Nama Objek : Btn_Kembali
+  Teks       : "Kembali"
+  Lokasi     : Di dalam panel 'UI_Canvas'
+

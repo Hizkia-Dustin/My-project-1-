@@ -295,6 +295,7 @@ GameObject:
   - component: {fileID: 594438156}
   - component: {fileID: 594438155}
   - component: {fileID: 594438154}
+  - component: {fileID: 594438158}
   m_Layer: 0
   m_Name: hompage
   m_TagString: Untagged
@@ -388,6 +389,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &594438158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594438153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 076d0a8c1e111f64b9b2a86b5462c9cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultClickSound: {fileID: 0}
+  customSounds:
+  - targetButton: {fileID: 594854021}
+    soundEffect: {fileID: 8300000, guid: dca3084cb66e8824bab682c584bec504, type: 3}
+  - targetButton: {fileID: 1938473181}
+    soundEffect: {fileID: 8300000, guid: dca3084cb66e8824bab682c584bec504, type: 3}
+  - targetButton: {fileID: 1807682678}
+    soundEffect: {fileID: 8300000, guid: dca3084cb66e8824bab682c584bec504, type: 3}
 --- !u!1 &594854019
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,7 +422,7 @@ GameObject:
   - component: {fileID: 594854022}
   - component: {fileID: 594854021}
   m_Layer: 0
-  m_Name: PlayOfflineButton
+  m_Name: Btn_PlayOfflineButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -720,7 +741,7 @@ GameObject:
   - component: {fileID: 1807682679}
   - component: {fileID: 1807682678}
   m_Layer: 0
-  m_Name: 'INSTRUCTION '
+  m_Name: Btn_INSTRUCTION
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -929,7 +950,7 @@ GameObject:
   - component: {fileID: 1938473182}
   - component: {fileID: 1938473181}
   m_Layer: 0
-  m_Name: ARScannerTile
+  m_Name: Btn_ARScannerTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

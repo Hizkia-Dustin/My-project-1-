@@ -1164,6 +1164,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 675286149}
     m_Modifications:
+    - target: {fileID: 374193164, guid: 136925f19a5c5344292e339e3a57dfd9, type: 3}
+      propertyPath: m_Name
+      value: Btn_KembaliKeMenu
+      objectReference: {fileID: 0}
     - target: {fileID: 374193166, guid: 136925f19a5c5344292e339e3a57dfd9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -6627,6 +6631,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1367791267}
   - component: {fileID: 1367791266}
+  - component: {fileID: 1367791268}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -6682,6 +6687,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1367791268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367791265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 076d0a8c1e111f64b9b2a86b5462c9cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickSound: {fileID: 0}
 --- !u!1 &1408204337
 GameObject:
   m_ObjectHideFlags: 0
@@ -9784,7 +9802,7 @@ GameObject:
   - component: {fileID: 1973737799}
   - component: {fileID: 1973737798}
   m_Layer: 0
-  m_Name: Button_Back
+  m_Name: Btn_Kembali
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
