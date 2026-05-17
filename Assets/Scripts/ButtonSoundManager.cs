@@ -192,6 +192,16 @@ public class ButtonSoundManager : MonoBehaviour
         }
     }
 
+    private float GetSFXVolumeForActiveScene()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "SampleScene")
+        {
+            return 0.7f; // Naik jadi 70%
+        }
+        return sfxVolume;
+    }
+
     public void PlaySound(AudioClip clip)
     {
         if (clip != null)
@@ -218,7 +228,7 @@ public class ButtonSoundManager : MonoBehaviour
             GameObject tempAudioObj = new GameObject("TempAudio_" + clip.name);
             AudioSource tempSource = tempAudioObj.AddComponent<AudioSource>();
             tempSource.clip = clip;
-            tempSource.volume = sfxVolume;
+            tempSource.volume = GetSFXVolumeForActiveScene();
             
             // Suara tetap hidup meskipun scene dihancurkan
             DontDestroyOnLoad(tempAudioObj);

@@ -165,12 +165,20 @@ public class GameManager : MonoBehaviour
 
     // --- FASE 3: POP-UP DIBUKA OLEH KARTU AR ---
     
+    private float GetSFXVolumeForActiveScene() {
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "SampleScene") {
+            return 0.7f; // Naik jadi 70%
+        }
+        return sfxVolume;
+    }
+
     private void PlayMarkerSoundEffect(AudioClip clip) {
         if (clip != null) {
             GameObject tempObj = new GameObject("TempMarkerSound_" + clip.name);
             AudioSource source = tempObj.AddComponent<AudioSource>();
             source.clip = clip;
-            source.volume = sfxVolume;
+            source.volume = GetSFXVolumeForActiveScene();
             source.Play();
             Destroy(tempObj, clip.length);
         }
