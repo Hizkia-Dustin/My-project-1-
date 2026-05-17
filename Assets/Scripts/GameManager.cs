@@ -124,6 +124,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void KembaliKeMenu() {
+        ButtonSoundManager.PlayDefaultSound();
         SceneManager.LoadScene("HOMEPAGE");
     }
 
@@ -290,6 +291,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void KembaliKeHomeDariAR() {
+        ButtonSoundManager.PlayDefaultSound();
         SceneManager.LoadScene("HOMEPAGE");
     }
 

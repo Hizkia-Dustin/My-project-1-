@@ -4124,6 +4124,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3830378543113515969, guid: 0a39773fa003fdd48befb587843def57, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3830378543113515971, guid: 0a39773fa003fdd48befb587843def57, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -6629,7 +6633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 076d0a8c1e111f64b9b2a86b5462c9cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultClickSound: {fileID: 0}
+  defaultClickSound: {fileID: 8300000, guid: dca3084cb66e8824bab682c584bec504, type: 3}
   customSounds:
   - targetButton: {fileID: 304870518}
     soundEffect: {fileID: 8300000, guid: 388c360750dfcd34eac2b0be237adf65, type: 3}

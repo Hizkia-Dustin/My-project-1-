@@ -17,12 +17,13 @@ public class SetupInstructionScene : EditorWindow
         // 1. Buat scene baru yang kosong
         Scene newScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-        // 2. Tambahkan Kamera
+        // 2. Tambahkan Kamera & AudioListener
         GameObject camObj = new GameObject("Main Camera");
         Camera cam = camObj.AddComponent<Camera>();
         cam.clearFlags = CameraClearFlags.SolidColor;
         cam.backgroundColor = new Color(0.1f, 0.15f, 0.1f); 
         camObj.tag = "MainCamera";
+        camObj.AddComponent<AudioListener>();
 
         // 3. Tambahkan EventSystem
         GameObject esObj = new GameObject("EventSystem");

@@ -1935,7 +1935,7 @@ GameObject:
   - component: {fileID: 458034190}
   - component: {fileID: 458034192}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: GameManager_Gameplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2006,7 +2006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 076d0a8c1e111f64b9b2a86b5462c9cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultClickSound: {fileID: 0}
+  defaultClickSound: {fileID: 8300000, guid: dca3084cb66e8824bab682c584bec504, type: 3}
   customSounds:
   - targetButton: {fileID: 1692810066}
     soundEffect: {fileID: 8300000, guid: 563884892133af446bdb373e00a7a764, type: 3}
@@ -6439,7 +6439,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.185, y: 0.15062578}
   m_AnchorMax: {x: 0.81852657, y: 0.27749875}
-  m_AnchoredPosition: {x: -3.5, y: 0}
+  m_AnchoredPosition: {x: -3.4999924, y: 0}
   m_SizeDelta: {x: -7, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1734300650

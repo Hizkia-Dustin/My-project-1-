@@ -90,19 +90,41 @@ public class SyncPanelToARScanner : EditorWindow
         newPanel.name = "PanelInfoTanaman"; // Pastikan namanya bersih tanpa (Clone)
         newPanel.transform.SetAsLastSibling(); // Taruh di paling bawah hierarchy canvas
 
-        // 6. Ubah Teks Tombol khusus untuk ARCardScan
-        Button btn = newPanel.GetComponentInChildren<Button>(true);
-        if (btn != null)
+        // 6. Buat/Atur tombol kembali khusus untuk ARCardScan
+        GameManager gm = GameObject.FindObjectOfType<GameManager>();
+
+        Transform klaimBtnTrans = newPanel.transform.Find("Btn_Klaim10Poin!");
+        Transform kembaliBtnTrans = newPanel.transform.Find("Btn_KembaliKeMenu");
+
+        if (kembaliBtnTrans == null && klaimBtnTrans != null)
         {
-            TextMeshProUGUI btnText = btn.GetComponentInChildren<TextMeshProUGUI>(true);
+            // Duplikasi Btn_Klaim10Poin! untuk membuat Btn_KembaliKeMenu secara dinamis
+            GameObject newBtnGo = GameObject.Instantiate(klaimBtnTrans.gameObject, newPanel.transform);
+            newBtnGo.name = "Btn_KembaliKeMenu";
+            kembaliBtnTrans = newBtnGo.transform;
+        }
+
+        if (kembaliBtnTrans != null)
+        {
+            kembaliBtnTrans.gameObject.SetActive(true);
+            RectTransform rt = kembaliBtnTrans.GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                rt.anchoredPosition = Vector2.zero;
+                rt.sizeDelta = Vector2.zero;
+                rt.anchorMin = new Vector2(0.28f, 0.05f);
+                rt.anchorMax = new Vector2(0.73f, 0.12f);
+                rt.pivot = new Vector2(0.5f, 0.5f);
+            }
+
+            TextMeshProUGUI btnText = kembaliBtnTrans.GetComponentInChildren<TextMeshProUGUI>(true);
             if (btnText != null)
             {
                 btnText.text = "Kembali ke Menu";
             }
         }
 
-        // 7. Sambungkan ulang referensi di GameManager
-        GameManager gm = GameObject.FindObjectOfType<GameManager>();
+        // 7. Sambungkan ulang referensi di GameManager dan atur listener klik
         if (gm != null)
         {
             SerializedObject so = new SerializedObject(gm);
@@ -148,17 +170,28 @@ public class SyncPanelToARScanner : EditorWindow
             so.ApplyModifiedProperties();
 
             // Ubah Fungsi Klik Tombol jadi KembaliKeHome
-            if (btn != null)
+            if (kembaliBtnTrans != null)
             {
-                SerializedObject soBtn = new SerializedObject(btn);
-                SerializedProperty persistentCalls = soBtn.FindProperty("m_OnClick.m_PersistentCalls.m_Calls");
-                if (persistentCalls != null)
+                Button btn = kembaliBtnTrans.GetComponent<Button>();
+                if (btn != null)
                 {
-                    persistentCalls.ClearArray();
-                    soBtn.ApplyModifiedProperties();
+                    SerializedObject soBtn = new SerializedObject(btn);
+                    SerializedProperty persistentCalls = soBtn.FindProperty("m_OnClick.m_PersistentCalls.m_Calls");
+                    if (persistentCalls != null)
+                    {
+                        persistentCalls.ClearArray();
+                        soBtn.ApplyModifiedProperties();
+                    }
+                    UnityEventTools.AddPersistentListener(btn.onClick, gm.KembaliKeHomeDariAR);
                 }
-                UnityEventTools.AddPersistentListener(btn.onClick, gm.KembaliKeHomeDariAR);
             }
+        }
+
+        // Nonaktifkan Btn_Klaim10Poin! khusus untuk ARCardScan
+        if (klaimBtnTrans != null)
+        {
+            klaimBtnTrans.gameObject.SetActive(false);
+            Debug.Log("Deactivated Btn_Klaim10Poin! in synced AR panel.");
         }
 
         newPanel.SetActive(false); // Sembunyikan secara default

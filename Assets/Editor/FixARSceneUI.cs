@@ -30,27 +30,51 @@ public class FixARSceneUI : EditorWindow
             return;
         }
 
-        // Find the button (usually the one used for Klaim)
-        Button btn = panel.GetComponentInChildren<Button>();
-        if (btn == null)
+        // Find the GameManager
+        GameManager gm = GameObject.FindObjectOfType<GameManager>();
+
+        Transform klaimBtnTrans = panel.transform.Find("Btn_Klaim10Poin!");
+        Transform kembaliBtnTrans = panel.transform.Find("Btn_KembaliKeMenu");
+
+        if (kembaliBtnTrans == null && klaimBtnTrans != null)
         {
-            Debug.LogError("No Button found in PanelInfoTanaman!");
+            // Duplikasi Btn_Klaim10Poin! untuk membuat Btn_KembaliKeMenu secara dinamis
+            GameObject newBtnGo = GameObject.Instantiate(klaimBtnTrans.gameObject, panel.transform);
+            newBtnGo.name = "Btn_KembaliKeMenu";
+            kembaliBtnTrans = newBtnGo.transform;
+        }
+
+        if (kembaliBtnTrans == null)
+        {
+            Debug.LogError("Btn_KembaliKeMenu not found and could not be created from Btn_Klaim10Poin!");
             return;
         }
 
-        // Change Text
-        TextMeshProUGUI btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
+        // Atur agar Btn_KembaliKeMenu aktif dan diposisikan dengan benar
+        kembaliBtnTrans.gameObject.SetActive(true);
+        RectTransform rt = kembaliBtnTrans.GetComponent<RectTransform>();
+        if (rt != null)
+        {
+            rt.anchoredPosition = Vector2.zero;
+            rt.sizeDelta = Vector2.zero;
+            rt.anchorMin = new Vector2(0.28f, 0.05f);
+            rt.anchorMax = new Vector2(0.73f, 0.12f);
+            rt.pivot = new Vector2(0.5f, 0.5f);
+        }
+
+        // Atur teks tombol kembali
+        TextMeshProUGUI btnText = kembaliBtnTrans.GetComponentInChildren<TextMeshProUGUI>(true);
         if (btnText != null)
         {
             btnText.text = "Kembali ke Menu";
         }
 
-        // Change OnClick
-        GameManager gm = GameObject.FindObjectOfType<GameManager>();
+        // Hubungkan referensi GameManager
         if (gm != null)
         {
             SerializedObject so = new SerializedObject(gm);
             so.FindProperty("panelInfoTanaman").objectReferenceValue = panel;
+            
             // Cari teks menggunakan pencarian rekursif agar tidak rusak jika dipindah ke dalam grup layout
             var allTexts = panel.GetComponentsInChildren<TextMeshProUGUI>(true);
             foreach (var txt in allTexts)
@@ -60,26 +84,34 @@ public class FixARSceneUI : EditorWindow
                 else if (txt.gameObject.name == "Text_DeskripsiTanaman")
                     so.FindProperty("textDeskripsiTanaman").objectReferenceValue = txt;
             }
-            
             so.ApplyModifiedProperties();
 
-            // Clear existing persistent listeners using SerializedObject
-            SerializedObject soBtn = new SerializedObject(btn);
-            SerializedProperty persistentCalls = soBtn.FindProperty("m_OnClick.m_PersistentCalls.m_Calls");
-            if (persistentCalls != null)
+            // Atur listener klik untuk Btn_KembaliKeMenu
+            Button btn = kembaliBtnTrans.GetComponent<Button>();
+            if (btn != null)
             {
-                persistentCalls.ClearArray();
-                soBtn.ApplyModifiedProperties();
+                SerializedObject soBtn = new SerializedObject(btn);
+                SerializedProperty persistentCalls = soBtn.FindProperty("m_OnClick.m_PersistentCalls.m_Calls");
+                if (persistentCalls != null)
+                {
+                    persistentCalls.ClearArray();
+                    soBtn.ApplyModifiedProperties();
+                }
+                UnityEventTools.AddPersistentListener(btn.onClick, gm.KembaliKeHomeDariAR);
             }
-
-            // Add the new listener
-            UnityEventTools.AddPersistentListener(btn.onClick, gm.KembaliKeHomeDariAR);
             
-            Debug.Log("Successfully updated Button and GameManager references in ARCardScan scene!");
+            Debug.Log("Successfully updated Btn_KembaliKeMenu and GameManager references in ARCardScan scene!");
         }
         else
         {
             Debug.LogWarning("GameManager not found in scene. Click listener not set.");
+        }
+
+        // Nonaktifkan Btn_Klaim10Poin! agar tidak tumpang tindih
+        if (klaimBtnTrans != null)
+        {
+            klaimBtnTrans.gameObject.SetActive(false);
+            Debug.Log("Deactivated Btn_Klaim10Poin! in AR Card UI.");
         }
 
         EditorSceneManager.SaveScene(scene);
