@@ -19,7 +19,7 @@ public class BackgroundMusicManager : MonoBehaviour
     [Header("Volume & Transisi")]
     [Range(0f, 1f)]
     [Tooltip("Volume maksimal untuk musik latar")]
-    public float targetVolume = 0.4f;
+    public float targetVolume = 0.5f;
     [Tooltip("Durasi transisi (crossfade) dalam detik")]
     public float fadeDuration = 1.5f;
 
@@ -63,6 +63,8 @@ public class BackgroundMusicManager : MonoBehaviour
             {
                 Instance.defaultMusicClip = this.defaultMusicClip;
             }
+            Instance.targetVolume = this.targetVolume;
+            Instance.fadeDuration = this.fadeDuration;
             
             Instance.InitializeMusicDictionary();
             Instance.UpdateMusicForActiveScene();

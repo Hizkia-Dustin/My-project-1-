@@ -20,7 +20,10 @@ public class SceneTransitionManager : MonoBehaviour
                     // Buat GameObject baru jika tidak ada
                     GameObject go = new GameObject("SceneTransitionManager");
                     _instance = go.AddComponent<SceneTransitionManager>();
-                    DontDestroyOnLoad(go);
+                    if (Application.isPlaying)
+                    {
+                        DontDestroyOnLoad(go);
+                    }
                 }
             }
             return _instance;
@@ -43,7 +46,10 @@ public class SceneTransitionManager : MonoBehaviour
         {
             _instance = this;
             transform.SetParent(null); // Pastikan berada di root hierarchy
-            DontDestroyOnLoad(gameObject);
+            if (Application.isPlaying)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
             SetupTransitionUI();
         }
         else if (_instance != this)
@@ -56,12 +62,12 @@ public class SceneTransitionManager : MonoBehaviour
     {
         // 1. Buat GameObject Canvas
         GameObject canvasGo = new GameObject("TransitionCanvas");
-        canvasGo.transform.SetParent(this.transform);
+        canvasGo.transform.SetParent(this.transform, false);
 
         // 2. Tambahkan komponen Canvas
         transitionCanvas = canvasGo.AddComponent<Canvas>();
         transitionCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        transitionCanvas.sortingOrder = 99999; // Sangat tinggi agar selalu di atas UI lain
+        transitionCanvas.sortingOrder = 32767; // Menggunakan 32767 (max short) agar tidak overflow ke negatif!
 
         // 3. Tambahkan CanvasScaler untuk responsivitas layar
         CanvasScaler scaler = canvasGo.AddComponent<CanvasScaler>();
@@ -80,7 +86,7 @@ public class SceneTransitionManager : MonoBehaviour
 
         // 6. Buat overlay hitam penutup layar
         GameObject imageGo = new GameObject("BlackOverlay");
-        imageGo.transform.SetParent(canvasGo.transform);
+        imageGo.transform.SetParent(canvasGo.transform, false);
 
         Image image = imageGo.AddComponent<Image>();
         image.color = Color.black;

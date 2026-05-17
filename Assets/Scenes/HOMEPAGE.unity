@@ -691,6 +691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultClickSound: {fileID: 8300000, guid: dca3084cb66e8824bab682c584bec504, type: 3}
+  sfxVolume: 0.15
   customSounds:
   - targetButton: {fileID: 594854021}
     soundEffect: {fileID: 8300000, guid: dca3084cb66e8824bab682c584bec504, type: 3}
@@ -860,20 +861,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78bd6d05953560c40be61e84ccd34059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetVolume: 0.35
+  targetVolume: 0.5
   fadeDuration: 1.2
   defaultMusicClip: {fileID: 8300000, guid: 76adc3bada8ddff4bbd042635fed2f7d, type: 3}
   sceneMusicList:
   - sceneName: HOMEPAGE
-    musicClip: {fileID: 8300000, guid: 76adc3bada8ddff4bbd042635fed2f7d, type: 3}
+    musicClip: {fileID: 8300000, guid: 4f692dca7018be645a24a54d3c8689f7, type: 3}
   - sceneName: InstructionSceneAuto
-    musicClip: {fileID: 8300000, guid: 67583b1df87740e41b2542fe351fd91d, type: 3}
+    musicClip: {fileID: 8300000, guid: 26c2ff7d3aa63c447885ce833d4e2fb6, type: 3}
   - sceneName: CreditScene
-    musicClip: {fileID: 8300000, guid: 6996c6a6c942c7d4d9f2fb5ab5163fda, type: 3}
+    musicClip: {fileID: 8300000, guid: 236a7490ad4cd0c4a9400dde877d5016, type: 3}
   - sceneName: SampleScene
-    musicClip: {fileID: 8300000, guid: d25774535e9db5b4f8843bab04c3c3ad, type: 3}
+    musicClip: {fileID: 8300000, guid: f08f484b59f51e14880e1b253556907b, type: 3}
   - sceneName: ARCardScan
-    musicClip: {fileID: 8300000, guid: 67583b1df87740e41b2542fe351fd91d, type: 3}
+    musicClip: {fileID: 8300000, guid: 4f692dca7018be645a24a54d3c8689f7, type: 3}
 --- !u!4 &800154216
 Transform:
   m_ObjectHideFlags: 0

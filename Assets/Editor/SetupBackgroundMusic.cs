@@ -12,16 +12,16 @@ public class SetupBackgroundMusic : EditorWindow
         Debug.Log("🎵 [SetupBackgroundMusic] Memulai setup background music di semua scene...");
 
         // Cari audio clips yang akan dipasang
-        AudioClip homepageClip = LoadClipByName("Mysterious Chapter");
-        AudioClip instructionClip = LoadClipByName("Discovery 1");
-        AudioClip creditClip = LoadClipByName("Cosmic Reveal");
-        AudioClip sampleClip = LoadClipByName("Ice Magic");
-        AudioClip arClip = LoadClipByName("Discovery 1");
+        AudioClip homepageClip = LoadClipByName("BGM03prairie");
+        AudioClip instructionClip = LoadClipByName("BGM04Town1");
+        AudioClip creditClip = LoadClipByName("BGM09credits");
+        AudioClip sampleClip = LoadClipByName("BGM06adventure1");
+        AudioClip arClip = LoadClipByName("BGM03prairie");
 
-        if (homepageClip == null) Debug.LogWarning("⚠️ [SetupBackgroundMusic] Clip 'Mysterious Chapter' tidak ditemukan.");
-        if (instructionClip == null) Debug.LogWarning("⚠️ [SetupBackgroundMusic] Clip 'Discovery 1' tidak ditemukan.");
-        if (creditClip == null) Debug.LogWarning("⚠️ [SetupBackgroundMusic] Clip 'Cosmic Reveal' tidak ditemukan.");
-        if (sampleClip == null) Debug.LogWarning("⚠️ [SetupBackgroundMusic] Clip 'Ice Magic' tidak ditemukan.");
+        if (homepageClip == null) Debug.LogWarning("⚠️ [SetupBackgroundMusic] Clip 'BGM03prairie' tidak ditemukan.");
+        if (instructionClip == null) Debug.LogWarning("⚠️ [SetupBackgroundMusic] Clip 'BGM04Town1' tidak ditemukan.");
+        if (creditClip == null) Debug.LogWarning("⚠️ [SetupBackgroundMusic] Clip 'BGM09credits' tidak ditemukan.");
+        if (sampleClip == null) Debug.LogWarning("⚠️ [SetupBackgroundMusic] Clip 'BGM06adventure1' tidak ditemukan.");
 
         // Daftar scene
         string[] scenePaths = new string[]

@@ -20,6 +20,10 @@ public class ButtonSoundManager : MonoBehaviour
     [Tooltip("Suara standar yang dimainkan jika tombol tidak punya suara khusus")]
     public AudioClip defaultClickSound;
     
+    [Range(0f, 1f)]
+    [Tooltip("Volume untuk efek suara tombol")]
+    public float sfxVolume = 0.15f;
+    
     [Header("Suara Khusus per Tombol")]
     [Tooltip("Tambahkan elemen baru, lalu tarik objek tombol dan masukkan file suaranya")]
     public List<ButtonSoundSetup> customSounds = new List<ButtonSoundSetup>();
@@ -39,6 +43,7 @@ public class ButtonSoundManager : MonoBehaviour
                 var newManager = go.AddComponent<ButtonSoundManager>();
                 newManager.defaultClickSound = this.defaultClickSound;
                 newManager.customSounds = this.customSounds;
+                newManager.sfxVolume = this.sfxVolume;
                 Instance = newManager;
                 DontDestroyOnLoad(go);
                 
@@ -63,6 +68,7 @@ public class ButtonSoundManager : MonoBehaviour
             {
                 Instance.defaultClickSound = this.defaultClickSound;
             }
+            Instance.sfxVolume = this.sfxVolume;
             Instance.InitializeSoundDictionary();
             Instance.BindAllButtonsInScene();
             
@@ -212,6 +218,7 @@ public class ButtonSoundManager : MonoBehaviour
             GameObject tempAudioObj = new GameObject("TempAudio_" + clip.name);
             AudioSource tempSource = tempAudioObj.AddComponent<AudioSource>();
             tempSource.clip = clip;
+            tempSource.volume = sfxVolume;
             
             // Suara tetap hidup meskipun scene dihancurkan
             DontDestroyOnLoad(tempAudioObj);

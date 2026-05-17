@@ -67,6 +67,10 @@ public class GameManager : MonoBehaviour
     public AudioClip soundJawabanBenar;
     public AudioClip soundJawabanSalah;
 
+    [Header("Volume Efek Suara")]
+    [Range(0f, 1f)]
+    public float sfxVolume = 0.15f;
+
     private List<Player> players = new List<Player>();
     private int currentPlayerIndex = 0;
 
@@ -166,6 +170,7 @@ public class GameManager : MonoBehaviour
             GameObject tempObj = new GameObject("TempMarkerSound_" + clip.name);
             AudioSource source = tempObj.AddComponent<AudioSource>();
             source.clip = clip;
+            source.volume = sfxVolume;
             source.Play();
             Destroy(tempObj, clip.length);
         }
