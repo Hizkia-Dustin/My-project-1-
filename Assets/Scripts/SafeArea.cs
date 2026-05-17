@@ -7,7 +7,7 @@ public class SafeArea : MonoBehaviour
     private RectTransform rectTransform;
     private Rect lastSafeArea = new Rect(0, 0, 0, 0);
     private Vector2 lastScreenSize = new Vector2(0, 0);
-    private ScreenOrientation lastOrientation = ScreenOrientation.Unknown;
+    private ScreenOrientation lastOrientation = (ScreenOrientation)(-1);
 
     void Awake()
     {
